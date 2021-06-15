@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>proxy list</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+</head>
+<body>
+
+    
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">proxylist</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav pull-right">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="https://github.com/fate0/proxylist" target="_blank">About</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br>
+<br>
+<br>
+
+<div class="container">
+    <p></p>
+    <table class="table-condensed" id="table" data-pagination=true data-page-size=15 data-page-list=20
+           data-striped=true data-escape=true data-sort-name="response_time" data-sort-order="asc">
+    </table>
+    <p></p>
+</div>
+
+<script>
+    var $table = $('#table');
+
+    $(function () {
+        $.get("/proxy.list", function(result) {
+            var proxylist_tmp = result.split('\n');
+            var proxylist = [];
+            $.each(proxylist_tmp, function(n, value) {
+                try {
+                    proxylist.push(JSON.parse(value));
+                } catch (e) {
+                    console.log(value);
+                }
+            });
+            $table.bootstrapTable({
+                data: proxylist,
+                columns: [
+                    {
+                        field: "host",
+                        title: "host",
+                        sortable: true,
+                    },
+                    {
+                        field: "port",
+                        title: "port",
+                        sortable: true,
+                    },
+                    {
+                        field: "type",
+                        title: "type",
+                        sortable: true,
+                    },
+                    {
+                        field: "country",
+                        title: "country",
+                        sortable: true,
+                    },
+                    {
+                        field: "anonymity",
+                        title: "anonymity",
+                        sortable: true,
+                    },
+                    {
+                        field: "response_time",
+                        title: "response time",
+                        sortable: true,
+                    }
+                ]
+            });
+
+        });
+    });
+</script>
+
+</body>
+</html>
